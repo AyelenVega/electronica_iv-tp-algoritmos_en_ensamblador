@@ -39,6 +39,8 @@ defun suma
     push {r4-r11,lr}
     // Insertar código a continuación
 
+    ADD R0,R0,R1
+
     // Retorno, antes R0 debe tener el valor correcto
     pop {r4-r11,pc}
 endfun suma
@@ -60,9 +62,28 @@ defun sumatoria
     push {r4-r11,lr}
     // Insertar código a continuación
 
+    mov r3, r0
+    mov r4,r1
+    mov r0, #0      
+    mov r1, #0     
+    mov r2, #0 
+
+    sum_loop:
+       cmp r2, r3
+       bge f
+       ldr r5, [r4, r2, lsl#2]
+       add r0,r0,r5
+       adc r1,r1, #0
+       cmp r1, #0
+       adc r1,r1, #0
+       add r2, r2, #1
+   
     // Retorno, antes R1:R0 debe tener el valor correcto
+    f:
     pop {r4-r11,pc}
+
 endfun sumatoria
+
 
 /**
  * Encuentra la posicion del máximo elemento de un arreglo
@@ -77,11 +98,35 @@ endfun sumatoria
  *  R0 : posición del máximo elemento en el arreglo, entero
  *       de 32 bit.
  */
+
 defun posicion_maximo
     push {r4-r11,lr}
     // Insertar código a continuación
 
+    mov r3, r0
+    mov r4, r1
+    mov r0, #0
+    mov r1, #0
+    mov r2, #0
+
+    bucle:
+    cmp r3, #1
+    ble exit
+    ldr r1, [r4, r0, lsl#2]
+    mov r2, #1
+        nombre:
+            cmp r2,r3
+            bge exit
+            ldr r5, [r4, r2, lsl#2]
+            cmp r5, r1
+            bge comparacion
+            mov r1,r5
+            mov r0, r2
+            comparacion:
+                add r2,r2,#1
+    
     // Retorno, antes R0 debe tener el valor correcto
+    exit:
     pop {r4-r11,pc}
 endfun posicion_maximo
 
@@ -105,7 +150,24 @@ endfun posicion_maximo
 defun ordenar_en_sitio_menor_a_mayor
     push {r4-r11,lr}
     // Insertar código a continuación
+     mov r3, r0
+     mov r4, r1
+     mov r1, #0
+     mov r2, #0
+     sub r0, r3, #1
+
+     ciclo:
+        cmp r0, #0
+        ble fin
+        //j :=r2
+        ldr r5, [r4, r0, lsl#2]
+        mov r1, r5
+        ldr r6, [r4, r2, lsl#2]
+        mov r5,r6
+        mov r6,r1
+        subs r0,#1
 
     // Retorno
+    fin:
     pop {r4-r11,pc}
 endfun ordenar_en_sitio_menor_a_mayor
