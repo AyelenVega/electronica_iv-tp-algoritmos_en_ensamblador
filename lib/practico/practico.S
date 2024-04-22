@@ -112,20 +112,16 @@ defun posicion_maximo
     mov r3, r0
     mov r4, r1
     mov r0, #0
-    mov r1, #0
-    mov r2, #0
-
     cmp r3, #1
     ble exit
-    ldr r6, [r4, r0, lsl#2]
-    mov r1,r6
+    ldr r1, [r4, r0,lsl#2]
     mov r2, #1
 
     bucle:
         cmp r2,r3
         bge exit
-        ldr r5, [r4, r2, lsl#2]
-        cmp r5, r1
+        ldr r5, [r4, r2,lsl#2]
+        cmp r1, r5
         bge fin_comp
         mov r1,r5
         mov r0, r2
@@ -167,7 +163,7 @@ defun ordenar_en_sitio_menor_a_mayor
      ciclo:
         cmp r0, #0
         ble fin
-        //j :=r2
+        bl posicion_maximo
         ldr r5, [r4, r0, lsl#2]
         mov r1, r5
         ldr r6, [r4, r2, lsl#2]
