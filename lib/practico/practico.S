@@ -69,18 +69,24 @@ defun sumatoria
     mov r2, #0 
 
     sum_loop:
-       cmp r2, r3
-       bge f
-       ldr r5, [r4, r2, lsl#2]
-       add r0,r0,r5
-       adc r1,r1, #0
-       cmp r1, #0
-       adc r1,r1, #0
-       add r2, r2, #1
-   
+        cmp r2, r3
+        bge f
+        ldr r5, [r4, r2, lsl#2]
+        cmp r5, #0
+        blt negativo
+        adds r0,r0,r5
+        adc r1,#0
+        bal fin_loop
+    negativo:
+        adds r0,r0,r5
+        adc r1,#-1
+    fin_loop:
+        add r2,r2,#1
+        b sum_loop
+    
     // Retorno, antes R1:R0 debe tener el valor correcto
     f:
-    pop {r4-r11,pc}
+        pop {r4-r11,pc}
 
 endfun sumatoria
 
@@ -109,25 +115,27 @@ defun posicion_maximo
     mov r1, #0
     mov r2, #0
 
-    bucle:
     cmp r3, #1
     ble exit
-    ldr r1, [r4, r0, lsl#2]
+    ldr r6, [r4, r0, lsl#2]
+    mov r1,r6
     mov r2, #1
-        nombre:
-            cmp r2,r3
-            bge exit
-            ldr r5, [r4, r2, lsl#2]
-            cmp r5, r1
-            bge comparacion
-            mov r1,r5
-            mov r0, r2
-            comparacion:
-                add r2,r2,#1
+
+    bucle:
+        cmp r2,r3
+        bge exit
+        ldr r5, [r4, r2, lsl#2]
+        cmp r5, r1
+        bge fin_comp
+        mov r1,r5
+        mov r0, r2
+        fin_comp:
+        add r2,r2,#1
+        b bucle
     
     // Retorno, antes R0 debe tener el valor correcto
     exit:
-    pop {r4-r11,pc}
+        pop {r4-r11,pc}
 endfun posicion_maximo
 
 /**
